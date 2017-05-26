@@ -12,7 +12,7 @@ queue *newQueue(uint32_t size)
   q->size = size + 1;
   q->head = 0;
   q->tail = 0;
-  q->Q = (item *) calloc(size +1, sizeof(item));
+  q->Q = (treeNode **) calloc(size +1, sizeof(treeNode *));
   return q;
   // p->Q[size] = NULL;
 }
@@ -35,8 +35,8 @@ bool full(queue *q)
 }
 
 // uses insertion sort to move everything over
-// Add an item
-bool enqueue(queue *q, item i)
+// Add an treeNode
+bool enqueue(queue *q, treeNode *i)
 {
   if(full(q))
   {
@@ -46,7 +46,8 @@ bool enqueue(queue *q, item i)
   {
     uint32_t index = q->head;
     uint32_t size = q->size;
-    while(index > q-> tail && q->Q[(index -1) % size] > i)
+
+    while(index > q->tail && compare((q->Q[(index -1) % size]), i) > 0)
     {
       q->Q[index % size] = q->Q[(index -1) % size];
       index--;
@@ -59,7 +60,7 @@ bool enqueue(queue *q, item i)
 }
 
 // Remove from the rear
-bool dequeue(queue *q, item *i)
+bool dequeue(queue *q, treeNode **i)
 {
   if (empty(q))
 	{

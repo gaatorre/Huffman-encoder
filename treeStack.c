@@ -11,7 +11,7 @@ treeStack *newTreeStack()
   treeStack *s = (treeStack *) calloc(1, sizeof(treeStack));
   s->size = 10;
   s->top = 0;
-  s->entries = (item *) calloc(s->size, sizeof(item));
+  s->entries = (treeNode *) calloc(s->size, sizeof(treeNode));
   return s;
 }
 
@@ -24,12 +24,12 @@ void delTreeStack(treeStack *s)
 
 // pops the value at the top of the treeStack
 // returns NIL if the treeStackis empty
-item popTree(treeStack *s)
+treeNode popTree(treeStack *s)
 {
   // if the treeStackis not empty, return the element at the top
   if(!emptyInt(s))
   {
-    item i = s->entries[--s->top];
+    treeNode i = s->entries[--s->top];
     return i;
   }
 
@@ -38,15 +38,15 @@ item popTree(treeStack *s)
 
 // pushes entries onto the treeStack
 // resizes if the treeStackis full
-void pushTree(treeStack *s, item i)
+void pushTree(treeStack *s, treeNode i)
 {
   // if full then the treeStackneeds to be resized
   if(fullTree(s))
   {
     s->size *= 2;
-    s->entries = (item *) realloc( (void *)s->entries, sizeof(item) * (s->size) );
+    s->entries = (treeNode *) realloc( (void *)s->entries, sizeof(treeNode) * (s->size) );
   }
-  // pushes the item to the top of the treeStackwhile incrementing top
+  // pushes the treeNode to the top of the treeStackwhile incrementing top
   s->entries[s->top++] = i;
   return;
 }
