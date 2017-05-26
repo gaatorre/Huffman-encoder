@@ -9,10 +9,8 @@
 
 int main(void)
 {
-
-  treeNode *root = newNode('$', false, 55);
+  treeNode *left = newNode('$', true, 10);
   
-
   delTree(root);
   return 0;
 }

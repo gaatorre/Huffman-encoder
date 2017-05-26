@@ -27,3 +27,12 @@ void delTree(treeNode *s)
   delNode(s); // free the node
   return;
 }
+
+// Join two subtrees
+treeNode *join(treeNode *l, treeNode *r)
+{
+  treeNode *t = newNode('&', false, l->count + r->count);
+  t->left = l;
+  t->right = r;
+  return t;
+}

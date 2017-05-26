@@ -37,12 +37,12 @@ void delTree(treeNode *t);
 
 static inline void delNode(treeNode *h) { free(h); return; }
 
-// static inline int8_t compare(treeNode *l, treeNode *r)
-// {
-//   return l->count - r->count; // l < r if negative, 1 = r if 0, ...
-// }
-//
-// // Join two subtrees
-// treeNode *join(treeNode *l, treeNode *r);
+static inline int8_t compare(treeNode *l, treeNode *r)
+{
+  return l->count - r->count; // l < r if negative, 1 = r if 0, ...
+}
+
+// Join two subtrees
+treeNode *join(treeNode *l, treeNode *r);
 
 # endif
