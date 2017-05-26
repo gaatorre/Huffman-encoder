@@ -7,7 +7,7 @@
 # define NIL (void *) 0
 # endif
 
-typdef struct DAH treeNode;
+typedef struct DAH treeNode;
 
 struct DAH
 {
@@ -21,28 +21,28 @@ struct DAH
 treeNode *newNode(uint8_t s, bool l, uint64_t c);
 
 // Delete a tree
-treeNode *delTree(treeNode *t);
+void delTree(treeNode *t);
 
-// Dump a Huffman tree onto a file
-void dumpTree(treeNode *t, int file);
-
-// Build a tree from a saved tree
-treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes);
-
-// Step through a tree following the code
-int32_t *stepTree(treeNode *root, treeNode *t, uint32_t code);
-
-//Parase a Huffman tree to build codes
-void buildCode(treeNode *t, code s, code table[256]);
+// // Dump a Huffman tree onto a file
+// void dumpTree(treeNode *t, int file);
+//
+// // Build a tree from a saved tree
+// treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes);
+//
+// // Step through a tree following the code
+// int32_t *stepTree(treeNode *root, treeNode *t, uint32_t code);
+//
+// //Parase a Huffman tree to build codes
+// void buildCode(treeNode *t, code s, code table[256]);
 
 static inline void delNode(treeNode *h) { free(h); return; }
 
-static inline int8_t compare(treeNode *l, treeNode *r)
-{
-  return l->count - r->count; // l < r if negative, 1 = r if 0, ...
-}
-
-// Join two subtrees
-treeNode *join(treeNode *l, treeNode *r);
+// static inline int8_t compare(treeNode *l, treeNode *r)
+// {
+//   return l->count - r->count; // l < r if negative, 1 = r if 0, ...
+// }
+//
+// // Join two subtrees
+// treeNode *join(treeNode *l, treeNode *r);
 
 # endif
