@@ -3,26 +3,23 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include "intStack.h"
+# include "treeStack.h"
 # include "queue.h"
 # include "huffman.h"
 
 
 int main(void)
 {
-  queue *q = newQueue(10);
-
-  for(int i = 1; enqueue(q,newNode('$', true, i)); i = rand() % 45646)
+  treeStack *t = newTreeStack();
+  for(int x = 1; x <= 30; x++)
   {
-    ;
+    pushTree(t, newNode('$',true, x));
   }
-
-  treeNode *t;
-  while(dequeue(q, &t))
+  treeNode *test;
+  while((test = popTree(t)) != NIL)
   {
-    printf("\tCount is %lu\n", t->count);
-    delTree(t);
+    printf("%lu\n", test->count);
   }
-
-  delQueue(q);
+  delTreeStack(t);
   return 0;
 }
