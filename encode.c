@@ -9,8 +9,20 @@
 
 int main(void)
 {
-  treeNode *left = newNode('$', true, 10);
+  queue *q = newQueue(10);
 
-  delTree(left);
+  for(int i = 1; enqueue(q,newNode('$', true, i)); i = rand() % 45646)
+  {
+    ;
+  }
+
+  treeNode *t;
+  while(dequeue(q, &t))
+  {
+    printf("\tCount is %lu\n", t->count);
+    delTree(t);
+  }
+
+  delQueue(q);
   return 0;
 }
