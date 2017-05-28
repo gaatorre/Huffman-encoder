@@ -15,8 +15,8 @@ typedef struct queue
 queue *newQueue(uint32_t size); // Constructor
 void delQueue(queue *); // Destructor
 
-bool empty(queue *); // Is it empty?
-bool full(queue *); // Is it full?
+bool emptyQ(queue *); // Is it empty?
+bool fullQ(queue *); // Is it full?
 
 bool enqueue(queue *, treeNode *); // Add an treeNode
 bool dequeue(queue *, treeNode **); // Remove from the rear

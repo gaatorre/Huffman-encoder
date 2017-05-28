@@ -18,18 +18,26 @@ queue *newQueue(uint32_t size)
 }
 void delQueue(queue *q) // Destructor
 {
+  for(uint32_t x = 0; x < q->size; x++)
+  {
+    if(q->Q[x] != NIL)
+    {
+      printf("%lu\n", q->Q[x]->count);
+    }
+    delTree((q->Q[x]));
+  }
   free(q->Q);
   free(q);
 }
 
 // Is it empty?
-bool empty(queue *q)
+bool emptyQ(queue *q)
 {
   return q->head % q->size == q->tail % q->size;
 }
 
 // Is it full?
-bool full(queue *q)
+bool fullQ(queue *q)
 {
   return (q->head + 1) % q->size == (q->tail) % q->size;
 }
@@ -38,7 +46,7 @@ bool full(queue *q)
 // Add an treeNode
 bool enqueue(queue *q, treeNode *i)
 {
-  if(full(q))
+  if(fullQ(q))
   {
     return false;
   }
@@ -62,7 +70,7 @@ bool enqueue(queue *q, treeNode *i)
 // Remove from the rear
 bool dequeue(queue *q, treeNode **i)
 {
-  if (empty(q))
+  if (emptyQ(q))
 	{
 		return false;
 	}

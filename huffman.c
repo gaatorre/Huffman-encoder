@@ -24,6 +24,7 @@ void delTree(treeNode *s)
 
   delTree(s->left); // delete the left side
   delTree(s->right); // delete the right side
+  printf("%c Count is %lu\n",s->symbol, s->count);
   delNode(s); // free the node
   return;
 }
@@ -31,7 +32,7 @@ void delTree(treeNode *s)
 // Join two subtrees
 treeNode *join(treeNode *l, treeNode *r)
 {
-  treeNode *t = newNode('&', false, l->count + r->count);
+  treeNode *t = newNode('$', false, l->count + r->count);
   t->left = l;
   t->right = r;
   return t;

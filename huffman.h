@@ -31,7 +31,7 @@ void delTree(treeNode *t);
 // treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes);
 //
 // // Step through a tree following the code
-// int32_t *stepTree(treeNode *root, treeNode *t, uint32_t code);
+// int32_t *stepTree(treeNode *root, treeNode **t, uint32_t code);
 //
 // //Parase a Huffman tree to build codes
 // void buildCode(treeNode *t, code s, code table[256]);
