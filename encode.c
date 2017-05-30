@@ -97,6 +97,8 @@ int main(void)
 
   printf("%u\n", MAGICNUM);
   printf("size of tree is %u\n", 3 * leafCount - 1);
+  dumpTree(root);
+  printf("\n");
   // fd = open("output", O_RDWR | O_CREAT, S_IRUSR | S_IRGRP | S_IROTH | S_IRWXU);
   // if(fd < 0)
   // {

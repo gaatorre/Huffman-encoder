@@ -31,6 +31,27 @@ void delTree(treeNode *t)
   return;
 }
 
+// Dump a Huffman tree onto a file
+void dumpTree(treeNode *t/*, int file*/)
+{
+  if(t == NIL)
+  {
+    return;
+  }
+  dumpTree(t->left);
+  dumpTree(t->right);
+
+  if(t->leaf)
+  {
+    printf("L%c", t->symbol);
+  }
+  else
+  {
+    printf("I");
+  }
+  return;
+}
+
 void buildCode(treeNode *t, code s, code table[256])
 {
   uint32_t g;

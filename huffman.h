@@ -26,8 +26,8 @@ treeNode *newNode(uint8_t s, bool l, uint64_t c);
 // Delete a tree
 void delTree(treeNode *t);
 
-// // Dump a Huffman tree onto a file
-void dumpTree(treeNode *t, int file);
+// Dump a Huffman tree onto a file
+void dumpTree(treeNode *t/*, int file*/);
 
 // // Build a tree from a saved tree
 // treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes);
