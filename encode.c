@@ -11,6 +11,7 @@
 # include "treeStack.h"
 # include "queue.h"
 # include "huffman.h"
+# include "code.h"
 
 int main(void)
 {
@@ -21,13 +22,16 @@ int main(void)
   // queue
   queue *q = newQueue(256);
 
-  for(uint32_t x = 0; x < 256; x++) { histogram[x] = 0; }
+  for(uint32_t x = 0; x < 256; x++)
+  {
+    histogram[x] = 0;
+  }
 
   // Opening the file
   int fd = open("getty", O_RDONLY);
   struct stat buf;
   fstat(fd, &buf);
-  fileSize = buf.st_size - 1; // updating with the size of the file
+  fileSize = buf.st_size - 1; // updating with the size of the file, remember about eof character
   uint8_t *text = mmap(NIL, fileSize, PROT_READ, MAP_PRIVATE, fd, 0);
   if(text == MAP_FAILED)
   {
@@ -74,7 +78,8 @@ int main(void)
     enqueue(q, join(right, left));
   }
 
-
+  printTree(root, 3);
+  printf("%p\n", (void *) root);
 
   delQueue(q);
   return 0;

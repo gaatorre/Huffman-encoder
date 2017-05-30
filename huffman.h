@@ -3,6 +3,7 @@
 # include <stdint.h>
 # include <stdbool.h>
 # include <stdio.h>
+# include <ctype.h>
 
 # ifndef NIL
 # define NIL (void *) 0
@@ -42,6 +43,10 @@ static inline int32_t compare(treeNode *l, treeNode *r)
 {
   return l->count - r->count; // l < r if negative, 1 = r if 0, ...
 }
+
+static inline void spaces(int c) { for (int i = 0; i < c; i += 1) { putchar(' '); } return; }
+
+void printTree(treeNode *t, int depth);
 
 // Join two subtrees
 treeNode *join(treeNode *l, treeNode *r);

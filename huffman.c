@@ -28,6 +28,28 @@ void delTree(treeNode *s)
   return;
 }
 
+void printTree(treeNode *t, int depth)
+{
+  if (t && t->leaf)
+  {
+    if (isalnum(t->symbol))
+    {
+            spaces(4 * depth); printf("%c (%lu)\n", t->symbol, t->count);
+    }
+    else
+    {
+            spaces(4 * depth); printf("%X (%lu)\n", t->symbol, t->count);
+    }
+  }
+  else if (t)
+  {
+    spaces(4 * depth); printf("$ (%lu)\n", t->count);
+    printTree(t->left, depth + 1);
+    printTree(t->right, depth + 1);
+  }
+  return;
+}
+
 // Join two subtrees
 treeNode *join(treeNode *l, treeNode *r)
 {

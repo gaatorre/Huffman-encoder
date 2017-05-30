@@ -4,7 +4,7 @@
 # include <stdint.h>
 # include <stdbool.h>
 
-typdef struct code
+typedef struct code
 {
   uint8_t bits[32];
   uint32_t l;
@@ -26,18 +26,18 @@ static inline bool pushCode(code *c, uint32_t k)
   }
   else if (k == 0)
   {
-    c-> bits [c->l / 8] &= ~(0 x1 << (c->l % 8));
+    c-> bits [c->l / 8] &= ~(0x1 << (c->l % 8));
     c->l +=1;
   }
   else
   {
-    c-> bits [c->l / 8] |= (0 x1 << (c->l % 8));
+    c-> bits [c->l / 8] |= (0x1 << (c->l % 8));
     c->l += 1;
   }
   return true;
 }
 
-static inline bool popCode(code *c, uint32_t k)
+static inline bool popCode(code *c, uint32_t *k)
 {
   if(c->l == 0)
   {
@@ -46,7 +46,7 @@ static inline bool popCode(code *c, uint32_t k)
   else
   {
       c->l -= 1;
-      *k = ((0 x1 << (c->l % 8)) & c-> bits [c->l / 8]) >> (c->l % 8);
+      *k = ((0x1 << (c->l % 8)) & c-> bits [c->l / 8]) >> (c->l % 8);
       return true;
   }
 }
