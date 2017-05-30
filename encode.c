@@ -13,6 +13,8 @@
 # include "huffman.h"
 # include "code.h"
 
+# define MAGICNUM 0xdeadd00d
+
 int main(void)
 {
   // size of the file
@@ -21,6 +23,8 @@ int main(void)
   uint64_t histogram[256];
   // queue
   queue *q = newQueue(256);
+  // leaf count
+  uint16_t leafCount = 0;
 
   for(uint32_t x = 0; x < 256; x++)
   {
@@ -32,8 +36,8 @@ int main(void)
   struct stat buf;
   fstat(fd, &buf);
   fileSize = buf.st_size - 1; // updating with the size of the file, remember about eof character
-  uint8_t *text = mmap(NIL, fileSize, PROT_READ, MAP_PRIVATE, fd, 0);
-  if(text == MAP_FAILED)
+  uint8_t *sFile = mmap(NIL, fileSize, PROT_READ, MAP_PRIVATE, fd, 0);
+  if(sFile == MAP_FAILED)
   {
       printf("Mapping Failed\n");
       exit(1);
@@ -42,7 +46,7 @@ int main(void)
   // Creating the histogram
   for(uint32_t x = 0; x < fileSize; x++)
   {
-    histogram[text[x]]++;
+    histogram[sFile[x]]++;
   }
   histogram[0]++;
   histogram[255]++;
@@ -56,6 +60,7 @@ int main(void)
     if(histogram[x] > 0)
     {
       enqueue(q, newNode(x, true, histogram[x]));
+      leafCount++;
     }
   }
 
@@ -79,7 +84,28 @@ int main(void)
   }
 
   printTree(root, 3);
-  printf("%p\n", (void *) root);
+
+  // code table
+  code table[256];
+  for(uint32_t x = 0; x < 256; x++)
+  {
+    table[x] = newCode();
+  }
+  // creates the codes
+  code temp = newCode();
+  buildCode(root, temp, table);
+
+  printf("%u\n", MAGICNUM);
+  printf("size of tree is %u\n", 3 * leafCount - 1);
+  // fd = open("output", O_RDWR | O_CREAT, S_IRUSR | S_IRGRP | S_IROTH | S_IRWXU);
+  // if(fd < 0)
+  // {
+  //   printf("Error in output\n");
+  //   exit(1);
+  // }
+  //
+  // // char magic = (char)MAGICNUM;
+  // write(fd, sFile, 4);
 
   delQueue(q);
   return 0;

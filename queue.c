@@ -2,7 +2,7 @@
 // # include <stdbool.h>
 # include <stdlib.h>
 # include "queue.h"
-
+# include "code.h"
 // taken from Piazza examples. Credit to Prof. Long
 
 // Constructor

@@ -1,6 +1,6 @@
 # ifndef _CODE_H
 # define _CODE_H
-
+# include <stdio.h>
 # include <stdint.h>
 # include <stdbool.h>
 
@@ -26,7 +26,7 @@ static inline bool pushCode(code *c, uint32_t k)
   }
   else if (k == 0)
   {
-    c-> bits [c->l / 8] &= ~(0x1 << (c->l % 8));
+    c->bits [c->l / 8] &= ~(0x1 << (c->l % 8));
     c->l +=1;
   }
   else
@@ -48,6 +48,14 @@ static inline bool popCode(code *c, uint32_t *k)
       c->l -= 1;
       *k = ((0x1 << (c->l % 8)) & c-> bits [c->l / 8]) >> (c->l % 8);
       return true;
+  }
+}
+
+static inline void printCode(code *c)
+{
+  for(uint32_t x = 0; x < c->l; x++)
+  {
+    printf("%u", (*((c->bits) + x / 8) & (0x1 << x % 8)) != 0);
   }
 }
 

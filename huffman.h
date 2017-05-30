@@ -4,6 +4,7 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <ctype.h>
+# include "code.h"
 
 # ifndef NIL
 # define NIL (void *) 0
@@ -26,16 +27,16 @@ treeNode *newNode(uint8_t s, bool l, uint64_t c);
 void delTree(treeNode *t);
 
 // // Dump a Huffman tree onto a file
-// void dumpTree(treeNode *t, int file);
-//
+void dumpTree(treeNode *t, int file);
+
 // // Build a tree from a saved tree
 // treeNode *loadTree(uint8_t savedTree[], uint16_t treeBytes);
 //
 // // Step through a tree following the code
 // int32_t *stepTree(treeNode *root, treeNode **t, uint32_t code);
-//
-// //Parase a Huffman tree to build codes
-// void buildCode(treeNode *t, code s, code table[256]);
+
+//Parase a Huffman tree to build codes
+void buildCode(treeNode *t, code s, code table[256]);
 
 static inline void delNode(treeNode *h) { free(h); return; }
 

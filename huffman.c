@@ -1,9 +1,10 @@
 // # include <stdint.h>
 // # include <stdbool.h>
 # include <stdlib.h>
-# include "huffman.h"
 # include <stdio.h>
-
+# include <string.h>
+# include "huffman.h"
+# include "code.h"
 treeNode *newNode(uint8_t s, bool l, uint64_t c)
 {
   treeNode *t = (treeNode *) calloc(1, sizeof(treeNode));
@@ -16,17 +17,47 @@ treeNode *newNode(uint8_t s, bool l, uint64_t c)
 }
 
 // deletes the complete tree
-void delTree(treeNode *s)
+void delTree(treeNode *t)
 {
   // Has reached the end of the sublist
-  if(s == NIL)
+  if(t == NIL)
+  {
     return;
+  }
 
-  delTree(s->left); // delete the left side
-  delTree(s->right); // delete the right side
-  delNode(s); // free the node
+  delTree(t->left); // delete the left side
+  delTree(t->right); // delete the right side
+  delNode(t); // free the node
   return;
 }
+
+void buildCode(treeNode *t, code s, code table[256])
+{
+  uint32_t g;
+  if(t->left)
+  {
+    pushCode(&s, 0);
+    buildCode(t->left, s, table);
+    popCode(&s, &g);
+  }
+  if(t->right)
+  {
+    pushCode(&s, 1);
+    buildCode(t->right, s, table);
+    popCode(&s, &g);
+  }
+  if(t->leaf)
+  {
+    printf("I am a LEAF! %c: ", t->symbol);
+    printCode(&s);
+    memcpy((void *)&(table[t->symbol]), &s, sizeof(code));
+    popCode(&s, &g);
+    printf("\n");
+  }
+
+  return;
+}
+
 
 void printTree(treeNode *t, int depth)
 {
