@@ -6,7 +6,7 @@
 
 treeNode *newNode(uint8_t s, bool l, uint64_t c)
 {
-  treeNode *t = (treeNode *) malloc(sizeof(treeNode));
+  treeNode *t = (treeNode *) calloc(1, sizeof(treeNode));
   t->symbol = s;
   t->count = c;
   t->leaf = l;
@@ -24,7 +24,6 @@ void delTree(treeNode *s)
 
   delTree(s->left); // delete the left side
   delTree(s->right); // delete the right side
-  printf("%c Count is %lu\n",s->symbol, s->count);
   delNode(s); // free the node
   return;
 }

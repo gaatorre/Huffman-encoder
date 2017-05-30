@@ -20,10 +20,6 @@ void delQueue(queue *q) // Destructor
 {
   for(uint32_t x = 0; x < q->size; x++)
   {
-    if(q->Q[x] != NIL)
-    {
-      printf("%lu\n", q->Q[x]->count);
-    }
     delTree((q->Q[x]));
   }
   free(q->Q);
@@ -77,6 +73,7 @@ bool dequeue(queue *q, treeNode **i)
 	else
 	{
 		*i = q->Q[q->tail];
+    // q->Q[q->tail] = NIL;
 		q->tail = (q->tail + 1) % q->size;
 		return true;
 	}

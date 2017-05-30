@@ -55,7 +55,10 @@ int main(void)
     }
   }
 
+  // making the huffman tree
+
   //trouble begins here
+  // root is the huffman tree
   treeNode *root = NIL;
   treeNode *left = NIL;
   treeNode *right = NIL;
@@ -70,8 +73,9 @@ int main(void)
     dequeue(q, &right);
     enqueue(q, join(right, left));
   }
+
+
+
   delQueue(q);
-  printf("\n\n%p\n", (void *)root);
-  delTree(root);
   return 0;
 }
