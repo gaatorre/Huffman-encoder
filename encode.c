@@ -109,6 +109,7 @@ int main(void)
   // // char magic = (char)MAGICNUM;
   // write(fd, sFile, 4);
 
+  printf("Size of file is %lu\n", fileSize);
   delQueue(q);
   return 0;
 }

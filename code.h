@@ -59,6 +59,8 @@ static inline void printCode(code *c)
   }
 }
 
+void appendCode(code *);
+
 // write an appendCode for a bitVector which can take in a code * and
 // append that code to the bitVector
 
