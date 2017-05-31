@@ -14,60 +14,34 @@
 # include "code.h"
 
 # define MAGICNUM 0xdeadd00d
+# define ARRAY_SIZE 256
 
-int main(void)
+void createHistogram(uint64_t histogram[], uint8_t *sFile, uint64_t fileSize)
 {
-  // size of the file
-  uint64_t fileSize = 0;
-  // histogram array
-  uint64_t histogram[256];
-  // queue
-  queue *q = newQueue(256);
-  // leaf count
-  uint16_t leafCount = 0;
-
-  for(uint32_t x = 0; x < 256; x++)
-  {
-    histogram[x] = 0;
-  }
-
-  // Opening the file
-  int fd = open("getty", O_RDONLY);
-  struct stat buf;
-  fstat(fd, &buf);
-  fileSize = buf.st_size - 1; // updating with the size of the file, remember about eof character
-  uint8_t *sFile = mmap(NIL, fileSize, PROT_READ, MAP_PRIVATE, fd, 0);
-  if(sFile == MAP_FAILED)
-  {
-      printf("Mapping Failed\n");
-      exit(1);
-  }
-
   // Creating the histogram
   for(uint32_t x = 0; x < fileSize; x++)
   {
     histogram[sFile[x]]++;
   }
   histogram[0]++;
-  histogram[255]++;
+  histogram[ARRAY_SIZE - 1]++;
+}
 
-  // close the file
-  close(fd);
-
+void addNodes(uint64_t histogram[], queue *q, uint16_t *leafCount)
+{
   // adds nodes to the priority queue
-  for(uint32_t x = 0; x < 256; x++)
+  for(uint32_t x = 0; x < ARRAY_SIZE; x++)
   {
     if(histogram[x] > 0)
     {
       enqueue(q, newNode(x, true, histogram[x]));
-      leafCount++;
+      *leafCount += 1;
     }
   }
+}
 
-  // making the huffman tree
-
-  //trouble begins here
-  // root is the huffman tree
+treeNode *createHuffTree(queue *q)
+{
   treeNode *root = NIL;
   treeNode *left = NIL;
   treeNode *right = NIL;
@@ -82,34 +56,84 @@ int main(void)
     dequeue(q, &right);
     enqueue(q, join(right, left));
   }
+  return root;
+}
 
-  printTree(root, 3);
+int main(void)
+{
+  // size of the file
+  uint64_t fileSize = 0;
+  // histogram array
+  uint64_t histogram[ARRAY_SIZE];
+  // queue
+  queue *q = newQueue(ARRAY_SIZE);
+  // leaf count
+  uint16_t treeSize = 0;
+  // input file
+  uint8_t *sFile;
+  uint32_t magicNum = MAGICNUM;
+
+  // zero out the histrogram
+  for(uint32_t x = 0; x < ARRAY_SIZE; x++)
+  {
+    histogram[x] = 0;
+  }
+
+  // Opening the file
+  int fd = open("getty", O_RDONLY);
+  // check to make sure file exists
+  struct stat buf;
+  fstat(fd, &buf);
+  fileSize = buf.st_size - 1; // updating with the size of the file, remember about eof character
+  sFile = mmap(NIL, fileSize, PROT_READ, MAP_PRIVATE, fd, 0);
+  if(sFile == MAP_FAILED)
+  {
+      printf("Mapping Failed\n");
+      exit(1);
+  }
+
+  createHistogram(histogram, sFile, fileSize);
+
+  // close the file
+  close(fd);
+
+  // adds nodes to the priority queue
+  addNodes(histogram, q, &treeSize);
+
+  // making the huffman tree
+  // root is the huffman tree
+  treeNode *root = createHuffTree(q);
+
+  printTree(root, 1);
 
   // code table
   code table[256];
+
+  //fill the table with empty codes
   for(uint32_t x = 0; x < 256; x++)
   {
     table[x] = newCode();
   }
+
   // creates the codes
   code temp = newCode();
   buildCode(root, temp, table);
-
-  printf("%u\n", MAGICNUM);
-  printf("size of tree is %u\n", 3 * leafCount - 1);
-  dumpTree(root);
   printf("\n");
-  // fd = open("output", O_RDWR | O_CREAT, S_IRUSR | S_IRGRP | S_IROTH | S_IRWXU);
-  // if(fd < 0)
-  // {
-  //   printf("Error in output\n");
-  //   exit(1);
-  // }
-  //
-  // // char magic = (char)MAGICNUM;
-  // write(fd, sFile, 4);
+  treeSize = 3 * treeSize - 1;
 
-  printf("Size of file is %lu\n", fileSize);
+  FILE *oFile = fopen("output", "w");
+  if(oFile == NIL)
+  {
+    printf("Error in output\n");
+    exit(1);
+  }
+
+  int numWrite = fwrite(&magicNum, sizeof(magicNum), 1, oFile);
+  numWrite = fwrite(&fileSize, sizeof(fileSize), 1, oFile);
+  numWrite = fwrite(&treeSize, sizeof(treeSize), 1, oFile);
+  (void) numWrite;
+  dumpTree(root, oFile);
+  fclose(oFile);
   delQueue(q);
   return 0;
 }

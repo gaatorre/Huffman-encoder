@@ -59,10 +59,8 @@ static inline void printCode(code *c)
   }
 }
 
+// appends the code to the bitVector
 void appendCode(code *);
-
-// write an appendCode for a bitVector which can take in a code * and
-// append that code to the bitVector
 
 static inline bool emptyCode(code *c) { return c->l == 0; }
 

@@ -32,22 +32,25 @@ void delTree(treeNode *t)
 }
 
 // Dump a Huffman tree onto a file
-void dumpTree(treeNode *t/*, int file*/)
+void dumpTree(treeNode *t, FILE *file)
 {
   if(t == NIL)
   {
     return;
   }
-  dumpTree(t->left);
-  dumpTree(t->right);
+  dumpTree(t->left, file);
+  dumpTree(t->right, file);
 
   if(t->leaf)
   {
     printf("L%c", t->symbol);
+    fputc('L', file);
+    fputc(t->symbol, file);
   }
   else
   {
     printf("I");
+    fputc('I', file);
   }
   return;
 }
