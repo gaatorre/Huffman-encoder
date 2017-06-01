@@ -61,7 +61,7 @@ static inline void printCode(code *c)
 }
 
 // appends the code to the bitVector
-void appendCode(code, bitV *);
+uint32_t appendCode(code, bitV *);
 
 static inline bool emptyCode(code *c) { return c->l == 0; }
 

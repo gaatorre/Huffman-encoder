@@ -73,7 +73,7 @@ int main(void)
   uint16_t treeSize = 0;
   // input file
   uint8_t *sFile;
-  uint32_t magicNum = MAGICNUM;
+  uint32_t magicNumber = MAGICNUM;
 
   // zero out the histrogram
   for(uint32_t x = 0; x < ARRAY_SIZE; x++)
@@ -130,10 +130,10 @@ int main(void)
       code add = table[sFile[i]];
       bitlength = appendCode(add, bv);
   }
-  printf("bv length: %u", bv->length);
+  printf("bv length: %u", bitlength);
 
-  FILE *oFile = fopen("output", "w");
-  if(oFile == NIL)
+  int oFile = open("output", O_CREAT | O_WRONLY, S_IRUSR | S_IRGRP | S_IROTH);
+  if(oFile == -1)
   {
     printf("Error in output\n");
     exit(1);

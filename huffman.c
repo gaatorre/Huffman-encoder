@@ -1,14 +1,12 @@
 // # include <stdint.h>
 // # include <stdbool.h>
-# include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
+# include <unistd.h>
 # include "huffman.h"
 # include "code.h"
 
-char leaf = 'L';
-char interiorNode = 'I';
 
 treeNode *newNode(uint8_t s, bool l, uint64_t c)
 {
@@ -39,6 +37,8 @@ void delTree(treeNode *t)
 // Dump a Huffman tree onto a file
 void dumpTree(treeNode *t, int file)
 {
+  static char interNode = 'I';
+  static char leaf = 'L';
   if(t == NIL)
   {
     return;
@@ -55,7 +55,7 @@ void dumpTree(treeNode *t, int file)
   else
   {
     printf("I");
-    write(file, &interiorNode, sizeof(interiorNode));
+    write(file, &interNode, sizeof(interNode));
   }
   return;
 }
