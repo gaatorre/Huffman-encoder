@@ -137,13 +137,16 @@ int main(void)
     printf("Error in output\n");
     exit(1);
   }
-
-  int numWrite = fwrite(&magicNum, sizeof(magicNum), 1, oFile);
-  numWrite = fwrite(&fileSize, sizeof(fileSize), 1, oFile);
-  numWrite = fwrite(&treeSize, sizeof(treeSize), 1, oFile);
-  (void) numWrite;
+  
+  // Writes the magic number
+  write(oFile, &magicNumber, sizeof(magicNumber));
+  // Writes the size of the file
+  write(oFile, &fileSize, sizeof(fileSize));
+  // Writes the size of the tree
+  write(oFile, &treeSize, sizeof(treeSize));
+  // Dumps the tree
   dumpTree(root, oFile);
-  fclose(oFile);
-  delQueue(q);
+  // Closes the file
+  close(oFile);
   return 0;
 }
