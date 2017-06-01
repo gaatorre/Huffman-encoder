@@ -16,6 +16,7 @@
 
 # define MAGICNUM 0xdeadd00d
 # define ARRAY_SIZE 256
+# define INCREMENT 1000
 
 void createHistogram(uint64_t histogram[], uint8_t *sFile, uint64_t fileSize)
 {
@@ -129,6 +130,7 @@ int main(void)
     printf("Error in output\n");
     exit(1);
   }
+  
   // Writes the magic number
   write(oFile, &magicNumber, sizeof(magicNumber));
   // Writes the size of the file
