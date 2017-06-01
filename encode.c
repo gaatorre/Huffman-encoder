@@ -17,7 +17,6 @@
 # define MAGICNUM 0xdeadd00d
 # define ARRAY_SIZE 256
 
-// creates the histogram
 void createHistogram(uint64_t histogram[], uint8_t *sFile, uint64_t fileSize)
 {
   // Creating the histogram

@@ -3,6 +3,7 @@
 # include <stdio.h>
 # include <stdint.h>
 # include <stdbool.h>
+# include "bv.h"
 
 typedef struct code
 {
@@ -60,7 +61,7 @@ static inline void printCode(code *c)
 }
 
 // appends the code to the bitVector
-void appendCode(code *);
+void appendCode(code *, bv *);
 
 static inline bool emptyCode(code *c) { return c->l == 0; }
 
