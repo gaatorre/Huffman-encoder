@@ -12,7 +12,7 @@ uint32_t appendCode(code C, bitV *bv)
 	while (position + C.l > bv->length)
 	{
 		bv->length += INCREMENT;
-		bv->vector = realloc(bv->vector, bv->length * (sizeof(uint8_t)));
+		bv->vector = (uint8_t *)realloc(bv->vector, bv->length * (sizeof(uint8_t)));
 	}
 	for (uint32_t i = position; (i - position) < C.l; i++)
 	{
