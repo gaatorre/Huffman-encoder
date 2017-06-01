@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Wpedantic -Werror -std=c99 -D_GNU_SOURCE
+CFLAGS = -Wall -Wextra -Wpedantic -Werror -std=c99
 E_OBJECTS = queue.o encode.o huffman.o intStack.o treeStack.o code.o
 
 .PHONY: all
