@@ -123,7 +123,6 @@ int main(void)
   printf("\n");
   treeSize = 3 * treeSize - 1;
 
-
   FILE *oFile = fopen("output", "w");
   if(oFile == NIL)
   {
