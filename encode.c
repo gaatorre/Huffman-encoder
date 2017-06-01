@@ -16,6 +16,7 @@
 
 # define MAGICNUM 0xdeadd00d
 # define ARRAY_SIZE 256
+# define INCREMENT 1000
 
 void createHistogram(uint64_t histogram[], uint8_t *sFile, uint64_t fileSize)
 {
@@ -72,7 +73,7 @@ int main(void)
   uint16_t treeSize = 0;
   // input file
   uint8_t *sFile;
-  uint32_t magicNumber = MAGICNUM;
+  uint32_t magicNum = MAGICNUM;
 
   // zero out the histrogram
   for(uint32_t x = 0; x < ARRAY_SIZE; x++)
@@ -122,23 +123,20 @@ int main(void)
   printf("\n");
   treeSize = 3 * treeSize - 1;
 
-  // writing to the output
-  int oFile = open("output", O_CREAT | O_WRONLY, S_IRUSR | S_IRGRP | S_IROTH);
-  if(oFile == -1)
+
+  FILE *oFile = fopen("output", "w");
+  if(oFile == NIL)
   {
     printf("Error in output\n");
     exit(1);
   }
-  // Writes the magic number
-  write(oFile, &magicNumber, sizeof(magicNumber));
-  // Writes the size of the file
-  write(oFile, &fileSize, sizeof(fileSize));
-  // Writes the size of the tree
-  write(oFile, &treeSize, sizeof(treeSize));
-  // Dumps the tree
+
+  int numWrite = fwrite(&magicNum, sizeof(magicNum), 1, oFile);
+  numWrite = fwrite(&fileSize, sizeof(fileSize), 1, oFile);
+  numWrite = fwrite(&treeSize, sizeof(treeSize), 1, oFile);
+  (void) numWrite;
   dumpTree(root, oFile);
-  // Closes the file
-  close(oFile);
+  fclose(oFile);
   delQueue(q);
   return 0;
 }
