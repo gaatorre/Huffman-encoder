@@ -15,6 +15,8 @@ void appendCode(code C, bitV *bv)
 		{
 			setBit(bv, position);
 		}
+		uint32_t value = (valBit(bv, i) ? 1:0);
+		printf("Bit %u = %u\n", i, value);
 	}
 	position += C->l;
 }
