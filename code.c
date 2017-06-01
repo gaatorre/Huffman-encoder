@@ -2,7 +2,7 @@
 # include <stdlib.h>
 
 # define INCREMENT 8000
-void appendCode(code C, bitV *bv)
+uint32_t appendCode(code C, bitV *bv)
 {
 	static uint32_t position = 0;
 	(void)position;
@@ -24,4 +24,5 @@ void appendCode(code C, bitV *bv)
 		printf("Bit %u = %u\n", i, value);
 	}
 	position += C.l;
+	return position;
 }

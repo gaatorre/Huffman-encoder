@@ -124,10 +124,11 @@ int main(void)
   treeSize = 3 * treeSize - 1;
 
   bitV *bv = newVec(INCREMENT);
+  uint32_t bitlength = 0;
   for (uint32_t i = 0; i < fileSize; i++)
   {
       code add = table[sFile[i]];
-      appendCode(add, bv);
+      bitlength = appendCode(add, bv);
   }
   printf("bv length: %u", bv->length);
 
