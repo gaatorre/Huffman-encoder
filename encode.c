@@ -129,6 +129,7 @@ int main(void)
       code add = table[sFile[i]];
       appendCode(add, bv);
   }
+  printf("bv length: %u", bv->length);
 
   FILE *oFile = fopen("output", "w");
   if(oFile == NIL)
