@@ -8,4 +8,5 @@ void appendCode(code C, bitV *bv)
 		realloc(bv, (bv->l)+1000);
 	}
 	bv->v[position] |= code->bits[0];
+	position += C->l;
 }
