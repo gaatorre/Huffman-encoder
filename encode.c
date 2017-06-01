@@ -123,7 +123,7 @@ int main(void)
   printf("\n");
   treeSize = 3 * treeSize - 1;
 
-  Bitv *bv = newVec(INCREMENT);
+  bitV *bv = newVec(INCREMENT);
   for (uint32_t i = 0; i < fileSize; i++)
   {
       code add = table[sFile[i]];
