@@ -147,6 +147,11 @@ int main(void)
   write(oFile, &treeSize, sizeof(treeSize));
   // Dumps the tree
   dumpTree(root, oFile);
+  // write the bits
+  for(uint32_t i = 0; i < (bitlength / 8) + 1; i++)
+  {
+    write(oFile, &(bv->vector[i]), sizeof(bv->vector[i]));
+  }
   // Closes the file
   close(oFile);
   return 0;
