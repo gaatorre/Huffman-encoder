@@ -29,6 +29,7 @@ void createHistogram(uint64_t histogram[], uint8_t *sFile, uint64_t fileSize)
   histogram[ARRAY_SIZE - 1]++;
 }
 
+// adds nodes to the priority queue
 void addNodes(uint64_t histogram[], queue *q, uint16_t *leafCount)
 {
   // adds nodes to the priority queue
