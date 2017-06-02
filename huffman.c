@@ -48,13 +48,13 @@ void dumpTree(treeNode *t, int file)
 
   if(t->leaf)
   {
-    printf("L%c", t->symbol);
+    // printf("L%c", t->symbol);
     write(file, &leaf, sizeof(leaf));
     write(file, &t->symbol, sizeof(t->symbol));
   }
   else
   {
-    printf("I");
+    // printf("I");
     write(file, &interNode, sizeof(interNode));
   }
   return;
@@ -77,11 +77,11 @@ void buildCode(treeNode *t, code s, code table[256])
   }
   if(t->leaf)
   {
-    printf("I am a LEAF! %c: ", t->symbol);
-    printCode(&s);
+    // printf("I am a LEAF! %c: ", t->symbol);
+    // printCode(&s);
     memcpy((void *)&(table[t->symbol]), &s, sizeof(code));
     popCode(&s, &g);
-    printf("\n");
+    // printf("\n");
   }
 
   return;

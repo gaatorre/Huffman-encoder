@@ -5,10 +5,10 @@
 uint32_t appendCode(code C, bitV *bv)
 {
 	static uint32_t position = 0;
-	(void)position;
-	printf("Code: ");
-	printCode(&C);
-	printf("\n");
+	// (void)position;
+	// printf("Code: ");
+	// printCode(&C);
+	// printf("\n");
 	while (position + C.l > bv->length)
 	{
 		bv->length += INCREMENT;
@@ -20,8 +20,8 @@ uint32_t appendCode(code C, bitV *bv)
 		{
 			setBit(bv, i);
 		}
-		uint32_t value = (valBit(bv, i) ? 1:0);
-		printf("Bit %u = %u\n", i, value);
+		// uint32_t value = (valBit(bv, i) ? 1:0);
+		// printf("Bit %u = %u\n", i, value);
 	}
 	position += C.l;
 	return position;

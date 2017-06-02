@@ -82,11 +82,11 @@ int main(void)
   }
 
   // Opening the file
-  int fd = open("getty", O_RDONLY);
+  int fd = open("Heart_of_Darkness.txt", O_RDONLY);
   // check to make sure file exists
   struct stat buf;
   fstat(fd, &buf);
-  fileSize = buf.st_size - 1; // updating with the size of the file, remember about eof character
+  fileSize = buf.st_size; // updating with the size of the file, remember about eof character
   sFile = mmap(NIL, fileSize, PROT_READ, MAP_PRIVATE, fd, 0);
   if(sFile == MAP_FAILED)
   {
@@ -106,7 +106,7 @@ int main(void)
   // root is the huffman tree
   treeNode *root = createHuffTree(q);
 
-  printTree(root, 1);
+  // printTree(root, 1);
 
   // code table
   code table[256];
@@ -120,17 +120,17 @@ int main(void)
   // creates the codes
   code temp = newCode();
   buildCode(root, temp, table);
-  printf("\n");
+  // printf("\n");
   treeSize = 3 * treeSize - 1;
 
-  bitV *bv = newVec(INCREMENT);
-  uint32_t bitlength = 0;
-  for (uint32_t i = 0; i < fileSize; i++)
-  {
-      code add = table[sFile[i]];
-      bitlength = appendCode(add, bv);
-  }
-  printf("bv length: %u", bitlength);
+  // bitV *bv = newVec(INCREMENT);
+  // uint32_t bitlength = 0;
+  // for (uint32_t i = 0; i < fileSize; i++)
+  // {
+  //     code add = table[sFile[i]];
+  //     bitlength = appendCode(add, bv);
+  // }
+  // printf("bv length: %u", bitlength);
 
   int oFile = open("output", O_CREAT | O_WRONLY, S_IRUSR | S_IRGRP | S_IROTH);
   if(oFile == -1)
@@ -148,11 +148,14 @@ int main(void)
   // Dumps the tree
   dumpTree(root, oFile);
   // write the bits
-  for(uint32_t i = 0; i < (bitlength / 8) + 1; i++)
-  {
-    write(oFile, &(bv->vector[i]), sizeof(bv->vector[i]));
-  }
+  // for(uint32_t i = 0; i < (bitlength / 8) + 1; i++)
+  // {
+  //   write(oFile, &(bv->vector[i]), sizeof(bv->vector[i]));
+  // }
   // Closes the file
   close(oFile);
+  delQueue(q);
+  // delVec(bv);
+  delTree(root);
   return 0;
 }
