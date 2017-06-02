@@ -61,19 +61,45 @@ treeNode *createHuffTree(queue *q)
   return root;
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
   // size of the file
   uint64_t fileSize = 0;
+  // input filepath
+  char *inFile;
+  // output filepath
+  char *outFile;
+  // verbose
+  bool verbose = false;
+  (void) verbose;
   // histogram array
   uint64_t histogram[ARRAY_SIZE];
   // queue
   queue *q = newQueue(ARRAY_SIZE);
   // leaf count
   uint16_t treeSize = 0;
-  // input file
+  // input file memory map
   uint8_t *sFile;
+  // Magic Number
   uint32_t magicNumber = MAGICNUM;
+
+
+  int c;
+  while ((c = getopt (argc , argv , "i:o:v")) != -1)
+  {
+    switch (c)
+    {
+      case 'i':
+        inFile = optarg;
+        break;
+      case 'o':
+        outFile = optarg;
+        break;
+      case 'v':
+        verbose = false;
+        break;
+    }
+  }
 
   // zero out the histrogram
   for(uint32_t x = 0; x < ARRAY_SIZE; x++)
@@ -82,8 +108,14 @@ int main(void)
   }
 
   // Opening the file
-  int fd = open("Heart_of_Darkness.txt", O_RDONLY);
+  int fd = open(inFile, O_RDONLY);
   // check to make sure file exists
+  if(fd == -1)
+  {
+    // set errno!!!!!
+    printf("Opening %s Failed\n", inFile);
+    exit(1);
+  }
   struct stat buf;
   fstat(fd, &buf);
   fileSize = buf.st_size; // updating with the size of the file, remember about eof character
@@ -123,16 +155,16 @@ int main(void)
   // printf("\n");
   treeSize = 3 * treeSize - 1;
 
-  // bitV *bv = newVec(INCREMENT);
-  // uint32_t bitlength = 0;
-  // for (uint32_t i = 0; i < fileSize; i++)
-  // {
-  //     code add = table[sFile[i]];
-  //     bitlength = appendCode(add, bv);
-  // }
-  // printf("bv length: %u", bitlength);
+  bitV *bv = newVec(INCREMENT);
+  uint32_t bitlength = 0;
+  for (uint32_t i = 0; i < fileSize; i++)
+  {
+      code add = table[sFile[i]];
+      bitlength = appendCode(add, bv);
+  }
+  printf("bv length: %u\n", bitlength);
 
-  int oFile = open("output", O_CREAT | O_WRONLY, S_IRUSR | S_IRGRP | S_IROTH);
+  int oFile = open(outFile, O_CREAT | O_WRONLY, S_IRWXU | S_IRWXG | S_IRWXO);
   if(oFile == -1)
   {
     printf("Error in output\n");
@@ -148,14 +180,14 @@ int main(void)
   // Dumps the tree
   dumpTree(root, oFile);
   // write the bits
-  // for(uint32_t i = 0; i < (bitlength / 8) + 1; i++)
-  // {
-  //   write(oFile, &(bv->vector[i]), sizeof(bv->vector[i]));
-  // }
+  for(uint32_t i = 0; i < (bitlength / 8) + 1; i++)
+  {
+    write(oFile, &(bv->vector[i]), sizeof(bv->vector[i]));
+  }
   // Closes the file
   close(oFile);
+
   delQueue(q);
-  // delVec(bv);
-  delTree(root);
+  delVec(bv);
   return 0;
 }
