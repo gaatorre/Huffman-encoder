@@ -1,4 +1,5 @@
 # include <stdint.h>
+# include <string.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -7,6 +8,7 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <sys/mman.h>
+# include <errno.h>
 # include "intStack.h"
 # include "treeStack.h"
 # include "queue.h"
@@ -112,18 +114,18 @@ int main(int argc, char **argv)
   // check to make sure file exists
   if(fd == -1)
   {
-    // set errno!!!!!
-    printf("Opening %s Failed\n", inFile);
-    exit(1);
+    printf("%s: %s\n", inFile, strerror(errno));
+		return errno;
   }
+
   struct stat buf;
   fstat(fd, &buf);
   fileSize = buf.st_size; // updating with the size of the file, remember about eof character
   sFile = mmap(NIL, fileSize, PROT_READ, MAP_PRIVATE, fd, 0);
   if(sFile == MAP_FAILED)
   {
-      printf("Mapping Failed\n");
-      exit(1);
+      printf("%s\n", strerror(errno));
+      return(errno);
   }
 
   createHistogram(histogram, sFile, fileSize);
@@ -167,8 +169,8 @@ int main(int argc, char **argv)
   int oFile = open(outFile, O_CREAT | O_WRONLY, S_IRWXU | S_IRWXG | S_IRWXO);
   if(oFile == -1)
   {
-    printf("Error in output\n");
-    exit(1);
+    printf("%s: %s\n", outFile, strerror(errno));
+    return(errno);
   }
 
   // Writes the magic number
