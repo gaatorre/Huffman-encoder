@@ -1,18 +1,22 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Wpedantic -Werror -std=c99 -g -D_GNU_SOURCE
-E_OBJECTS = queue.o encode.o huffman.o intStack.o treeStack.o code.o bv.o
+E_OBJECTS = queue.o huffman.o intStack.o treeStack.o code.o bv.o
 
 .PHONY: all
 all: prog
 
-prog:$(E_OBJECTS)
-	$(CC) $(CFLAGS) $(E_OBJECTS) -o encode
+prog:$(E_OBJECTS) encode.o decode.o
+	$(CC) $(CFLAGS) $(E_OBJECTS) encode.o -o encode
+	$(CC) $(CFLAGS) $(E_OBJECTS) decode.o -o decode
 
 bv.o: bv.c
 	$(CC) $(CFLAGS) -c bv.c
 
 encode.o: encode.c
 	$(CC) $(CFLAGS) -c encode.c
+
+decode.o: decode.c
+	$(CC) $(CFLAGS) -c decode.c
 
 huffman.o: huffman.c
 	$(CC) $(CFLAGS) -c huffman.c
@@ -31,4 +35,4 @@ code.o: code.c
 
 .Phony: clean
 clean:
-	rm -f $(E_OBJECTS) encode
+	rm -f $(E_OBJECTS) encode decode
