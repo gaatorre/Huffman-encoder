@@ -17,9 +17,7 @@ bitV *newVec(uint32_t length)
 void delVec(bitV *bv)
 {
 	free(bv->vector); //Frees allocated space of the vector
-	bv->vector = NULL; //Sets to pointer to NULL
 	free(bv); //Frees allocated space of the bit Vector
-	bv = NULL; //Sets bit vector pointer to NULL
 	return;
 }
 
