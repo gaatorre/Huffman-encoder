@@ -16,12 +16,10 @@ queue *newQueue(uint32_t size)
   return q;
   // p->Q[size] = NULL;
 }
+
 void delQueue(queue *q) // Destructor
 {
-  for(uint32_t x = 0; x < q->size; x++)
-  {
-    delTree((q->Q[x]));
-  }
+  delTree(q->Q[q->head - 1]);
   free(q->Q);
   free(q);
 }

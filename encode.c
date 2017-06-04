@@ -73,12 +73,13 @@ int main(int argc, char **argv)
   char *outFile;
   // verbose
   bool verbose = false;
-  (void) verbose;
   // histogram array
   uint64_t histogram[ARRAY_SIZE];
   // queue
   queue *q = newQueue(ARRAY_SIZE);
   // leaf count
+  uint16_t leafCount = 0;
+  // tree size
   uint16_t treeSize = 0;
   // input file memory map
   uint8_t *sFile;
@@ -98,7 +99,7 @@ int main(int argc, char **argv)
         outFile = optarg;
         break;
       case 'v':
-        verbose = false;
+        verbose = true;
         break;
     }
   }
@@ -134,7 +135,7 @@ int main(int argc, char **argv)
   close(fd);
 
   // adds nodes to the priority queue
-  addNodes(histogram, q, &treeSize);
+  addNodes(histogram, q, &leafCount);
 
   // making the huffman tree
   // root is the huffman tree
@@ -154,8 +155,7 @@ int main(int argc, char **argv)
   // creates the codes
   code temp = newCode();
   buildCode(root, temp, table);
-  // printf("\n");
-  treeSize = 3 * treeSize - 1;
+  treeSize = 3 * leafCount - 1;
 
   bitV *bv = newVec(INCREMENT);
   uint32_t bitlength = 0;
@@ -164,7 +164,11 @@ int main(int argc, char **argv)
       code add = table[sFile[i]];
       bitlength = appendCode(add, bv);
   }
-  printf("bv length: %u\n", bitlength);
+
+  if(bitlength % 8)
+  {
+    bitlength += 8 - (bitlength % 8);
+  }
 
   int oFile = open(outFile, O_CREAT | O_WRONLY, S_IRWXU | S_IRWXG | S_IRWXO);
   if(oFile == -1)
@@ -182,14 +186,20 @@ int main(int argc, char **argv)
   // Dumps the tree
   dumpTree(root, oFile);
   // write the bits
-  for(uint32_t i = 0; i < (bitlength / 8) + 1; i++)
+  for(uint32_t i = 0; i < (bitlength / 8); i++)
   {
     write(oFile, &(bv->vector[i]), sizeof(bv->vector[i]));
   }
+
+  if(verbose)
+  {
+    printf("Original %lu bits: leaves %u (%u bytes) encoding\n", fileSize * 8, leafCount, treeSize);
+  }
   // Closes the file
   close(oFile);
-
-  delQueue(q);
+  munmap(sFile, fileSize);
   delVec(bv);
+  delQueue(q);
+  (void) verbose;
   return 0;
 }
