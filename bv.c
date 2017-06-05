@@ -57,3 +57,11 @@ uint32_t lenVec(bitV *bv)
 {
 	return bv->length;
 }
+
+void printVec(bitV *bv)
+{
+	for(uint32_t i = 0; i < bv->length; i++)
+	{
+		printf("Bit #%u: %u\n", i, valBit(bv, i) != 0);
+	}
+}
