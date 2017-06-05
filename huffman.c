@@ -6,6 +6,7 @@
 # include <unistd.h>
 # include "huffman.h"
 # include "code.h"
+# include "treeStack.h"
 
 
 treeNode *newNode(uint8_t s, bool l, uint64_t c)
@@ -117,4 +118,46 @@ treeNode *join(treeNode *l, treeNode *r)
   t->left = l;
   t->right = r;
   return t;
+}
+
+//Load from a given tree
+treeNode *loadTree(uint8_t savedTree[], uint16_t treeSize)
+{
+    treeStack *ts = newTreeStack();
+    for (uint16_t i = 0; i < treeSize; i++)
+    {
+        if (savedTree[i] == 'L')
+        {
+            pushTree(ts, newNode(savedTree[++i], true, 0));
+        }
+        else if (savedTree[i] == 'I')
+        {
+            treeNode *right = popTree(ts);
+            treeNode *left = popTree(ts);
+            pushTree(ts, join(left, right));
+        }
+    }
+    treeNode *output = popTree(ts);
+    //delTreeStack(ts);
+    return output;
+}
+
+// Step through a tree following the code
+int32_t stepTree(treeNode *root, treeNode **t, uint32_t code)
+{
+    if (code == 0)
+    {
+        t = &((*t)->left);
+    }
+    else if (code == 1)
+    {
+        t = &((*t)->right);
+    }
+    if ((*t)->leaf)
+    {
+        int32_t out = (int32_t)((*t)->symbol);
+        t = &root;
+        return out;
+    }
+    return -1;
 }
