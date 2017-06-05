@@ -141,7 +141,7 @@ int main(int argc, char **argv)
   // root is the huffman tree
   treeNode *root = createHuffTree(q);
 
-  // printTree(root, 1);
+  printTree(root, 1);
 
   // code table
   code table[256];

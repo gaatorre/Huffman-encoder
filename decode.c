@@ -18,8 +18,8 @@
 
 int main (int argc, char **argv)
 {
-	char *iFile;
-	char *oFile;
+	char *iFile = NULL;
+	char *oFile = NULL;
 	uint8_t sFile[14];
 	uint8_t magicN[4];
 	for (uint32_t i = 0; i < 4; i++)
@@ -69,10 +69,7 @@ int main (int argc, char **argv)
 	uint8_t savedTree[treeSize];
 	read(file, savedTree, treeSize);
 	//for (uint32_t i = 0; i < treeSize; i++) { printf("%c", savedTree[i]); }
-	//treeNode *tree = loadTree(savedTree, treeSize);
-	treeNode *a = newNode('a', true, 0);
-	treeNode *b = newNode('b', true, 0);
-	treeNode *tree = join(a,b);
+	treeNode *tree = loadTree(savedTree, treeSize);
 	printTree(tree, 1);
 	treeNode *treeStepper = tree;
 	char fileOutput[fileSize], bytes[1024];
@@ -96,7 +93,15 @@ int main (int argc, char **argv)
 			i = 0;
 		}
 	}
-	int outFile = open(oFile, O_CREAT | O_WRONLY, S_IRWXU | S_IRWXG | S_IRWXO);
+	int outFile = 0;
+	if (oFile == NULL)
+	{
+		outFile = 1;
+	}
+	else
+	{
+		outFile = open(oFile, O_CREAT | O_WRONLY, S_IRWXU | S_IRWXG | S_IRWXO);
+	}
     if(outFile == -1)
     {
       printf("%s: %s\n", oFile, strerror(errno));

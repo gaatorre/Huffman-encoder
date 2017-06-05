@@ -145,19 +145,22 @@ treeNode *loadTree(uint8_t savedTree[], uint16_t treeSize)
 // Step through a tree following the code
 int32_t stepTree(treeNode *root, treeNode **t, uint32_t code)
 {
+    // printf("\ntreeStepper points to %p %c\n", (void *) *t, (*t)->symbol);
     if (code == 0)
     {
-        t = &((*t)->left);
+        *t = ((*t)->left);
     }
     else if (code == 1)
     {
-        t = &((*t)->right);
+        *t = ((*t)->right);
     }
     if ((*t)->leaf)
     {
         int32_t out = (int32_t)((*t)->symbol);
-        t = &root;
+        // printf("\t\nSymbol was found %p %c\n", (void *) *t, (*t)->symbol);
+        *t = root;
         return out;
     }
+    // printf("\t\ntreeStepper points to %p %c\n", (void *) *t, (*t)->symbol);
     return -1;
 }
