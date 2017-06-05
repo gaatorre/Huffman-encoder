@@ -138,7 +138,7 @@ treeNode *loadTree(uint8_t savedTree[], uint16_t treeSize)
         }
     }
     treeNode *output = popTree(ts);
-    //delTreeStack(ts);
+    delTreeStack(ts);
     return output;
 }
 
