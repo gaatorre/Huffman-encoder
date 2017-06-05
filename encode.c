@@ -18,7 +18,7 @@
 
 # define MAGICNUM 0xdeadd00d
 # define ARRAY_SIZE 256
-# define INCREMENT 8000
+# define INCREMENT 16000
 
 void createHistogram(uint64_t histogram[], uint8_t *sFile, uint64_t fileSize)
 {
@@ -191,15 +191,21 @@ int main(int argc, char **argv)
     write(oFile, &(bv->vector[i]), sizeof(bv->vector[i]));
   }
 
+  // stat tracking
+  fstat(oFile, &buf);
+
   if(verbose)
   {
-    printf("Original %lu bits: leaves %u (%u bytes) encoding\n", fileSize * 8, leafCount, treeSize);
+    uint64_t outFileSize = buf.st_size;
+    double compressPercent = (((double)(outFileSize * 8) / fileSize * 8));
+    printf("Original %lu bits: leaves %u (%u bytes) encoding %lu bits (%.4f%%)\n",
+            fileSize * 8, leafCount, treeSize, outFileSize * 8, compressPercent);
   }
+
   // Closes the file
   close(oFile);
-  munmap(sFile, fileSize);
+  // munmap(sFile, fileSize);
   delVec(bv);
   delQueue(q);
-  (void) verbose;
   return 0;
 }

@@ -24,4 +24,6 @@ uint8_t valBit(bitV *bv, uint32_t index);
 
 uint32_t lenVec(bitV *bv);
 
+void printVec(bitV *bv);
+
 # endif
