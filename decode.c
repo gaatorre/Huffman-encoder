@@ -20,7 +20,7 @@ int main (int argc, char **argv)
 {
 	char *iFile = NULL;
 	char *oFile = NULL;
-	uint8_t *sFile;
+	uint8_t sFile[14];
 	uint8_t magicN[4];
 	for (uint32_t i = 0; i < 4; i++)
 	{
@@ -43,57 +43,40 @@ int main (int argc, char **argv)
         //   break;
       }
     }
+
 	int file = open(iFile, O_RDONLY);
 	if(file == -1)
     {
       printf("%s: %s\n", iFile, strerror(errno));
   		return errno;
     }
-	struct stat buf;
-	fstat(file, &buf);
-	uint64_t compressFileSize = buf.st_size;
-	sFile = mmap(NIL, compressFileSize, PROT_READ, MAP_PRIVATE, file, 0);
-
-	if(sFile == MAP_FAILED)
-	{
-		printf("%s\n", strerror(errno));
-		return(errno);
-	}
-
+	read(file, sFile, 4);
 	for (uint32_t i = 0; i < 4; i++)
 	{
-		if (sFile[i] != magicN[i] || iFile == NULL)
+		if (sFile[i] != magicN[i])
 		{
 			printf("Error: Not a compressed file\n");
 			return 0;
 		}
 	}
-
 	read(file, sFile, 8);
-	uint64_t fileSize = ((uint64_t)sFile[11] << 56)|((uint64_t)sFile[10] << 48)|
-						((uint64_t)sFile[9] << 40)|((uint64_t)sFile[8] << 32)|
-						((uint64_t)sFile[7] << 24)|((uint64_t)sFile[6] << 16)|
-						((uint64_t)sFile[5] << 8)|(sFile[4]);
-
-	uint16_t treeSize = (((uint16_t)sFile[13]) << 8)|(sFile[12]);
+	uint64_t fileSize = ((uint64_t)sFile[7] << 56)|((uint64_t)sFile[6] << 48)|
+						((uint64_t)sFile[5] << 40)|((uint64_t)sFile[4] << 32)|
+						((uint64_t)sFile[3] << 24)|((uint64_t)sFile[2] << 16)|
+						((uint64_t)sFile[1] << 8)|(sFile[0]);
+	read(file, sFile, 2);
+	uint16_t treeSize = (((uint16_t)sFile[1]) << 8)|(sFile[0]);
 	uint8_t savedTree[treeSize];
-	for (uint32_t i = 0; i < treeSize; i++)
-	{
-		savedTree[i] = sFile[14+i];
-	}
+	read(file, savedTree, treeSize);
 	//for (uint32_t i = 0; i < treeSize; i++) { printf("%c", savedTree[i]); }
 	treeNode *tree = loadTree(savedTree, treeSize);
 	//printTree(tree, 1);
 	treeNode *treeStepper = tree;
 	char fileOutput[fileSize];
 	uint64_t counter = 0;
-	uint32_t bitLength = compressFileSize - 14 - treeSize;
-	bitV *bv = newVec(bitLength*8);
-	for (uint32_t i = 0; i < bitLength; i++)
-	{
-		bv->vector[i] = sFile[i + 14 + treeSize];
-	}
-	for (uint32_t i = 0; i < bitLength*8; i++)
+	bitV *bv = newVec(fileSize);
+	int red = read(file, bv->vector, fileSize);
+	for (int32_t i = 0; i < red*8; i++)
 	{
 			int32_t result = stepTree(tree, &treeStepper, valBit(bv, i));
 			if (result != -1 && counter < fileSize)
