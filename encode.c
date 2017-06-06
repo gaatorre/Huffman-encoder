@@ -23,9 +23,12 @@
 void createHistogram(uint64_t histogram[], uint8_t *sFile, uint64_t fileSize)
 {
   // Creating the histogram
-  for(uint32_t x = 0; x < fileSize; x++)
+  if(sFile != NULL)
   {
-    histogram[sFile[x]]++;
+    for(uint32_t x = 0; x < fileSize; x++)
+    {
+      histogram[sFile[x]]++;
+    }
   }
   histogram[0]++;
   histogram[ARRAY_SIZE - 1]++;
@@ -70,7 +73,7 @@ int main(int argc, char **argv)
   // input filepath
   char *inFile;
   // output filepath
-  char *outFile;
+  char *outFile = NULL;
   // verbose
   bool verbose = false;
   // histogram array
@@ -82,7 +85,7 @@ int main(int argc, char **argv)
   // tree size
   uint16_t treeSize = 0;
   // input file memory map
-  uint8_t *sFile;
+  uint8_t *sFile = NULL;
   // Magic Number
   uint32_t magicNumber = MAGICNUM;
 
@@ -104,6 +107,7 @@ int main(int argc, char **argv)
     }
   }
 
+
   // zero out the histrogram
   for(uint32_t x = 0; x < ARRAY_SIZE; x++)
   {
@@ -122,10 +126,14 @@ int main(int argc, char **argv)
   struct stat buf;
   fstat(fd, &buf);
   fileSize = buf.st_size; // updating with the size of the file, remember about eof character
-  sFile = mmap(NIL, fileSize, PROT_READ, MAP_PRIVATE, fd, 0);
+  if(fileSize)
+  {
+    sFile = mmap(NIL, fileSize, PROT_READ, MAP_PRIVATE, fd, 0);
+  }
   if(sFile == MAP_FAILED)
   {
       printf("%s\n", strerror(errno));
+      printf("File size is %lu\n", fileSize);
       return(errno);
   }
 
@@ -140,8 +148,6 @@ int main(int argc, char **argv)
   // making the huffman tree
   // root is the huffman tree
   treeNode *root = createHuffTree(q);
-
-  printTree(root, 1);
 
   // code table
   code table[256];
@@ -173,8 +179,7 @@ int main(int argc, char **argv)
   int oFile = open(outFile, O_CREAT | O_WRONLY, S_IRWXU | S_IRWXG | S_IRWXO);
   if(oFile == -1)
   {
-    printf("%s: %s\n", outFile, strerror(errno));
-    return(errno);
+    oFile = 1;
   }
 
   // Writes the magic number

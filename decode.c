@@ -121,5 +121,6 @@ int main (int argc, char **argv)
 		write(outFile, &fileOutput[i], 1);
 	}
 	delTree(tree);
+	delVec(bv);
 	return 0;
 }
