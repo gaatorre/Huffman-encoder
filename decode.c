@@ -18,8 +18,8 @@
 
 int main (int argc, char **argv)
 {
-	char *iFile = NULL;
-	char *oFile = NULL;
+	char *iFile = NULL; //Input file
+	char *oFile = NULL; //Output file
 	uint8_t *sFile;
 	uint8_t magicN[4];
 	for (uint32_t i = 0; i < 4; i++)
