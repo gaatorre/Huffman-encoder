@@ -50,18 +50,10 @@ uint8_t valBit(bitV *bv, uint32_t index)
 {
 	//bitwise and with bitwise 1 shifted according to the bit needed
 	//returns a number if the bit is a 1 or a 0 if the bit is a 0
-	return (*((bv->vector)+index/8) & (0x1 << index%8));
+	return ((*((bv->vector)+index/8) & (0x1 << index%8)) ? 1:0);
 }
 
 uint32_t lenVec(bitV *bv)
 {
 	return bv->length;
-}
-
-void printVec(bitV *bv)
-{
-	for(uint32_t i = 0; i < bv->length; i++)
-	{
-		printf("Bit #%u: %u\n", i, valBit(bv, i) != 0);
-	}
 }

@@ -18,10 +18,9 @@ treeStack *newTreeStack()
 // deletes a treeStack and and its contents
 void delTreeStack(treeStack *s)
 {
-  delTree(s->entries[0]);
-  free(s->entries);
-  free(s);
-  return;
+    free(s->entries);
+    free(s);
+    return;
 }
 
 // pops the value at the top of the treeStack
