@@ -33,11 +33,15 @@ int main (int argc, char **argv)
       switch (c)
       {
         case 'i':
+		{
           iFile = optarg;
           break;
+	  	}
         case 'o':
+		{
          oFile = optarg;
           break;
+	    }
         // case 'v':
         //   verbose = false;
         //   break;
@@ -116,10 +120,7 @@ int main (int argc, char **argv)
       printf("%s: %s\n", oFile, strerror(errno));
       return(errno);
     }
-	for (uint64_t i = 0; i < fileSize; i++)
-	{
-		write(outFile, &fileOutput[i], 1);
-	}
+	write(outFile, fileOutput, fileSize);
 	delTree(tree);
 	delVec(bv);
 	return 0;
