@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Wpedantic -Werror -std=c99 -g -D_GNU_SOURCE
-E_OBJECTS = queue.o huffman.o intStack.o treeStack.o code.o bv.o
+E_OBJECTS = queue.o huffman.o treeStack.o code.o bv.o
 
 .PHONY: all
 all: prog
@@ -20,9 +20,6 @@ decode.o: decode.c
 
 huffman.o: huffman.c
 	$(CC) $(CFLAGS) -c huffman.c
-
-intStack.o: intStack.c
-	$(CC) $(CFLAGS) -c intStack.c
 
 queue.o: queue.c
 	$(CC) $(CFLAGS) -c queue.c
