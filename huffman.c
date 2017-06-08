@@ -1,5 +1,3 @@
-// # include <stdint.h>
-// # include <stdbool.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
@@ -8,7 +6,7 @@
 # include "code.h"
 # include "treeStack.h"
 
-
+// Creates a new tree node
 treeNode *newNode(uint8_t s, bool l, uint64_t c)
 {
   treeNode *t = (treeNode *) calloc(1, sizeof(treeNode));
@@ -38,24 +36,26 @@ void delTree(treeNode *t)
 // Dump a Huffman tree onto a file
 void dumpTree(treeNode *t, int file)
 {
+  // static variables were used for the characters instead of global variables
   static char interNode = 'I';
   static char leaf = 'L';
+  // Has reached the end of the sublist
   if(t == NIL)
   {
     return;
   }
-  dumpTree(t->left, file);
-  dumpTree(t->right, file);
 
+  dumpTree(t->left, file);   // dump the tree on the left
+  dumpTree(t->right, file);  // dump the tree on the right
+  // if it is a leaf, write the 'L' character and the node's symbol
   if(t->leaf)
   {
-    // printf("L%c", t->symbol);
     write(file, &leaf, sizeof(leaf));
     write(file, &t->symbol, sizeof(t->symbol));
   }
+  // else write the 'I' character for an interior node
   else
   {
-    // printf("I");
     write(file, &interNode, sizeof(interNode));
   }
   return;
@@ -78,17 +78,14 @@ void buildCode(treeNode *t, code s, code table[256])
   }
   if(t->leaf)
   {
-    // printf("I am a LEAF! %c: ", t->symbol);
-    // printCode(&s);
     memcpy((void *)&(table[t->symbol]), &s, sizeof(code));
     popCode(&s, &g);
-    // printf("\n");
   }
 
   return;
 }
 
-
+// Prints the tree -- credit to Prof. Long
 void printTree(treeNode *t, int depth)
 {
   if (t && t->leaf)
@@ -114,7 +111,9 @@ void printTree(treeNode *t, int depth)
 // Join two subtrees
 treeNode *join(treeNode *l, treeNode *r)
 {
+  // creates the parent node
   treeNode *t = newNode('$', false, l->count + r->count);
+  // assigns the children nodes
   t->left = l;
   t->right = r;
   return t;
