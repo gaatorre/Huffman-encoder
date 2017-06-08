@@ -4,6 +4,8 @@
 # include <stdbool.h>
 # include "huffman.h"
 
+//Interface given to us by Darrell
+
 typedef struct queue
 {
   uint32_t size; // How big is it?

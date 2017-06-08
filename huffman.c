@@ -122,13 +122,17 @@ treeNode *join(treeNode *l, treeNode *r)
 //Load from a given tree
 treeNode *loadTree(uint8_t savedTree[], uint16_t treeSize)
 {
+    //Creates tree stack
     treeStack *ts = newTreeStack();
+    //Goes through the tree information to build tree
     for (uint16_t i = 0; i < treeSize; i++)
     {
+        //If a leaf is encountered, add its symbol to stack
         if (savedTree[i] == 'L')
         {
             pushTree(ts, newNode(savedTree[++i], true, 0));
         }
+        //If inner node is encountered, pop 2 off stack and join them
         else if (savedTree[i] == 'I')
         {
             treeNode *right = popTree(ts);
@@ -136,6 +140,7 @@ treeNode *loadTree(uint8_t savedTree[], uint16_t treeSize)
             pushTree(ts, join(left, right));
         }
     }
+    //Pop once more and return that node (root)
     treeNode *output = popTree(ts);
     delTreeStack(ts);
     return output;
@@ -144,22 +149,24 @@ treeNode *loadTree(uint8_t savedTree[], uint16_t treeSize)
 // Step through a tree following the code
 int32_t stepTree(treeNode *root, treeNode **t, uint32_t code)
 {
-    // printf("\ntreeStepper points to %p %c\n", (void *) *t, (*t)->symbol);
+    //Goes to left if a zero is given
     if (code == 0)
     {
         *t = ((*t)->left);
     }
+    //Goes to right if a 1 is given
     else if (code == 1)
     {
         *t = ((*t)->right);
     }
+    //If it encounters a leaf after stepping, output the symbol
+    //and reset the stepper back to the root
     if ((*t)->leaf)
     {
         int32_t out = (int32_t)((*t)->symbol);
-        // printf("\t\nSymbol was found %p %c\n", (void *) *t, (*t)->symbol);
         *t = root;
         return out;
     }
-    // printf("\t\ntreeStepper points to %p %c\n", (void *) *t, (*t)->symbol);
+    //If not a leaf, return -1
     return -1;
 }

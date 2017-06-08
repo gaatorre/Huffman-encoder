@@ -3,6 +3,8 @@
 
 # define INCREMENT 8000
 
+//This code given to us by Darrell Long
+
 uint32_t appendCode(code C, bitV *bv)
 {
 	static uint32_t position = 0;

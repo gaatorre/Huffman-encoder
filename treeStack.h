@@ -8,6 +8,8 @@
 # define NIL (void *) 0
 # endif
 
+//Interface given to us by Darrell
+
 typedef struct treeStack
 {
   uint32_t size; // How big?

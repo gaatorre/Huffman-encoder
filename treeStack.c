@@ -15,7 +15,9 @@ treeStack *newTreeStack()
   return s;
 }
 
-// deletes a treeStack and and its contents
+// deletes a treeStack and the array of entries
+//but not the nodes themselves because that will be deleted
+//once we delete the tree
 void delTreeStack(treeStack *s)
 {
     free(s->entries);
@@ -28,6 +30,7 @@ void delTreeStack(treeStack *s)
 treeNode *popTree(treeStack *s)
 {
   // if the treeStackis not empty, return the element at the top
+  //and decreases the value of top
   if(!emptyTree(s))
   {
     treeNode *i = s->entries[--s->top];
@@ -52,8 +55,8 @@ void pushTree(treeStack *s, treeNode *i)
   return;
 }
 
-// returns 1 if treeStackis empty
-// 0 otherwise
+// returns true if treeStackis empty
+// false otherwise
 bool emptyTree(treeStack *s)
 {
   return s->top == 0;

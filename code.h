@@ -5,6 +5,8 @@
 # include <stdbool.h>
 # include "bv.h"
 
+//Interface given to us by Darrell
+
 typedef struct code
 {
   uint8_t bits[32];
